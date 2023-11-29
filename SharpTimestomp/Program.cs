@@ -13,21 +13,7 @@ namespace SharpTimestomp
         private SharpTimestomp(string filePath, DateTime dateTime)
         {
             this.filePath = filePath;
-            try
-            {
-                this.dateTime = dateTime;
-            }
-            catch (FormatException e)
-            {
-                Console.WriteLine($"test {e.ToString()}");
-                System.Environment.Exit(1);
-
-            }
-            catch (ArgumentOutOfRangeException e)
-            {
-                Console.WriteLine(e.ToString());
-                System.Environment.Exit(1);
-            }
+            this.dateTime = dateTime;
         }
 
         private SharpTimestomp()
