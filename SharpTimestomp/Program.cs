@@ -53,9 +53,10 @@ namespace SharpTimestomp
 
         static void Main(string[] args)
         {
+            SharpTimestomp sts = new SharpTimestomp();
+
             if (args.Length < 3)
             {
-                SharpTimestomp sts = new SharpTimestomp();
                 sts.helpMessage();
             }
 
@@ -70,6 +71,7 @@ namespace SharpTimestomp
             catch (FormatException e)
             {
                 Console.WriteLine($"{e.ToString()}");
+                sts.helpMessage();
                 System.Environment.Exit(1);
             }
 
@@ -77,11 +79,11 @@ namespace SharpTimestomp
 
             if (File.Exists(path))
             {
-                Console.WriteLine($"[+] Found file: {args[0]}");
+                Console.WriteLine($"[+] Found file: {path}");
             }
             else
             {
-                Console.WriteLine($"File does not exist at current location: {args[0]}");
+                Console.WriteLine($"File does not exist at current location: {path}");
                 System.Environment.Exit(1);
             }
 
@@ -91,15 +93,19 @@ namespace SharpTimestomp
             {
                 Console.WriteLine($"[>>>]Setting FileModified Date/Time: {sharpTimestomp.dateTime}");
                 sharpTimestomp.setModified();
+                Console.WriteLine($"[+] {path} - {method} date/time set successfully!");
             }
-            
-            if (method == "created")
+            else if (method == "created")
             {
                 Console.WriteLine($"[>>>] Setting FileCreated Date/Time: {sharpTimestomp.dateTime}");
                 sharpTimestomp.setCreated();
+                Console.WriteLine($"[+] {path} - {method} date/time set successfully!");
+            }
+            else 
+            { 
+                sts.helpMessage();
             }
 
-            Console.WriteLine($"[+] {path} - {method} date/time set successfully!");
         }
        
     }
