@@ -10,13 +10,32 @@ namespace SharpTimestomp
         private string filePath;
         private DateTime dateTime;
 
-        private SharpTimestomp(string filePath, string dateTime)
+        private SharpTimestomp(string filePath, DateTime dateTime)
         {
             this.filePath = filePath;
-            this.dateTime = DateTime.Parse(dateTime);
+            try
+            {
+                this.dateTime = dateTime;
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine($"test {e.ToString()}");
+                System.Environment.Exit(1);
+
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                Console.WriteLine(e.ToString());
+                System.Environment.Exit(1);
+            }
         }
 
-        private bool setModified()
+        private SharpTimestomp()
+        {
+
+        }
+
+        private void setModified()
         {
             try
             {
@@ -25,12 +44,10 @@ namespace SharpTimestomp
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
-                return false;
             }
-            return true;
         }
 
-        private bool setCreated()
+        private void setCreated()
         {
             try
             {
@@ -39,30 +56,48 @@ namespace SharpTimestomp
             catch (Exception e)
             {
                 Console.WriteLine(e.ToString());
-                return false;
             }
-            return true;
         }
+
+        public void helpMessage()
+        {
+            Console.WriteLine("Usage: SharpTimestomp.exe <file path> <2/4/2022 10:00:00 AM> <created/modified>");
+            System.Environment.Exit(1);
+        }
+
         static void Main(string[] args)
         {
-            string path;
-            string dateTime;
-            string method;
+            if (args.Length < 3)
+            {
+                SharpTimestomp sts = new SharpTimestomp();
+                sts.helpMessage();
+            }
 
-            if (File.Exists(args[0]))
+            string path = args[0];
+            string method = args[2];
+            DateTime dateTime;
+
+            try
+            {
+                dateTime = DateTime.Parse(args[1]);
+            }
+            catch (FormatException e)
+            {
+                Console.WriteLine($"{e.ToString()}");
+                System.Environment.Exit(1);
+            }
+
+            dateTime = DateTime.Parse(args[1]);
+
+            if (File.Exists(path))
             {
                 Console.WriteLine($"[+] Found file: {args[0]}");
-                path = args[0];
             }
             else
             {
                 Console.WriteLine($"File does not exist at current location: {args[0]}");
                 System.Environment.Exit(1);
             }
-
-            path = args[0];
-            dateTime = args[1];
-            method = args[2];
 
             SharpTimestomp sharpTimestomp = new SharpTimestomp(path, dateTime);
 
